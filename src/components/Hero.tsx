@@ -1,28 +1,12 @@
 import TopographyField from "./TopographyField";
-import { count, number, percent } from "../lib/format";
-import type { ModelCard } from "../types";
+import type { Disease } from "../types";
 
 interface HeroProps {
   accent: string;
-  model: ModelCard | null;
+  diseases: Disease[];
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <span className="numeral text-2xl font-light tracking-tight text-chalk sm:text-3xl">
-        {value}
-      </span>
-      <span className="kicker">{label}</span>
-    </div>
-  );
-}
-
-export default function Hero({ accent, model }: HeroProps) {
-  const test = model?.test_metrics;
-  const exams = model?.exam_counts;
-  const total = exams ? Object.values(exams).reduce((sum, value) => sum + value, 0) : null;
-
+export default function Hero({ accent, diseases }: HeroProps) {
   return (
     <section id="topo" className="relative min-h-[100svh] overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -54,18 +38,15 @@ export default function Hero({ accent, model }: HeroProps) {
               <span className="h-px w-10 bg-current opacity-50" />
               Manometria esofágica de alta resolução
             </p>
-            <h1 className="text-[clamp(2.75rem,8vw,7rem)] font-medium leading-[0.92] tracking-[-0.045em]">
-              Dez deglutições,
+            <h1 className="text-[clamp(2.4rem,6.4vw,5.4rem)] font-medium leading-[1.0] tracking-[-0.045em]">
+              Classificação de Chicago v4.0
               <br />
-              <span className="font-serif italic font-normal tracking-[-0.02em] text-signal">
-                um diagnóstico.
-              </span>
+              <span className="text-mist">por inteligência artificial</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-mist sm:text-xl">
-              Envie o laudo do exame. O sistema recorta as topografias de pressão exatamente como o
-              corpus de treino foi construído, recupera as métricas de Chicago da própria imagem e
-              devolve a classificação do estudo — com os números que abriram cada porta da árvore de
-              decisão.
+              Envie o laudo da manometria. O sistema recorta as topografias de pressão das dez
+              deglutições, recupera os parâmetros de Chicago da própria imagem e devolve o
+              diagnóstico do exame com os números que sustentam cada critério.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <a
@@ -94,26 +75,22 @@ export default function Hero({ accent, model }: HeroProps) {
           </div>
         </div>
 
-        <div className="mt-16 border-t hairline pt-8">
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:gap-16">
-            <Stat
-              value={test?.macro_f1 != null ? number(test.macro_f1, 3) : "—"}
-              label="macro-F1 no teste"
-            />
-            <Stat
-              value={test?.balanced_accuracy != null ? percent(test.balanced_accuracy, 1) : "—"}
-              label="acurácia balanceada"
-            />
-            <Stat
-              value={test?.auroc_ovr != null ? number(test.auroc_ovr, 3) : "—"}
-              label="AUROC um-contra-resto"
-            />
-            <Stat
-              value={total != null ? count(total) : "—"}
-              label="exames · partição por paciente"
-            />
+        {diseases.length > 0 && (
+          <div className="mt-16 border-t hairline pt-8">
+            <p className="kicker mb-5">Classes reconhecidas</p>
+            <ul className="flex flex-wrap gap-x-7 gap-y-3">
+              {diseases.map((disease) => (
+                <li key={disease.slug} className="flex items-center gap-2.5 text-sm text-mist">
+                  <span
+                    className="h-1.5 w-1.5 rounded-full"
+                    style={{ background: disease.accent }}
+                  />
+                  {disease.short_name}
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

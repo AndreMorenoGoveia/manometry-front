@@ -1,10 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { ApiError, analyze, getDiseases, getHealth, getModelCard } from "./api";
+import {
+  ApiError,
+  analyze,
+  getDiseases,
+  getHealth,
+  getModelCard,
+  getSampleDiagnoses,
+  getSampleReport,
+} from "./api";
 import DiseaseAtlas from "./components/DiseaseAtlas";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
-import Method from "./components/Method";
+import Results from "./components/Results";
 import Nav from "./components/Nav";
 import PipelineProgress from "./components/PipelineProgress";
 import Reveal from "./components/Reveal";
@@ -47,10 +55,7 @@ export default function App() {
     // The model card needs the checkpoint in memory, so it is allowed to fail
     // quietly: the page is still worth reading without it.
     getModelCard(signal).then(setModel).catch(() => setModel(null));
-    fetch("/api/samples", { signal })
-      .then((response) => (response.ok ? response.json() : { available: [] }))
-      .then((payload: { available?: string[] }) => setSamples(payload.available ?? []))
-      .catch(() => setSamples([]));
+    getSampleDiagnoses(signal).then(setSamples).catch(() => setSamples([]));
 
     return () => controller.abort();
   }, []);
@@ -84,10 +89,7 @@ export default function App() {
     async (slug: string) => {
       setLoadingSample(slug);
       try {
-        const response = await fetch(`/api/sample-report?diagnosis=${encodeURIComponent(slug)}`);
-        if (!response.ok) throw new Error("indisponível");
-        const blob = await response.blob();
-        submit(new File([blob], `laudo_exemplo_${slug}.docx`, { type: blob.type }));
+        submit(await getSampleReport(slug));
       } catch {
         setStage({
           kind: "error",
@@ -130,7 +132,7 @@ export default function App() {
       <Nav health={health} />
 
       <main>
-        <Hero accent={accent} model={model} />
+        <Hero accent={accent} diseases={diseases} />
 
         <section id="analise" className="relative scroll-mt-24 border-t hairline py-28 sm:py-36">
           <div className="mx-auto max-w-[1180px] px-6 lg:px-10">
@@ -141,12 +143,11 @@ export default function App() {
                   Análise
                 </p>
                 <h2 className="text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.02] tracking-[-0.04em]">
-                  Envie o laudo,
-                  <span className="font-serif italic font-normal"> leia o raciocínio</span>
+                  Envie o laudo do exame
                 </h2>
                 <p className="mt-6 text-lg leading-relaxed text-mist">
-                  O arquivo não é gravado: as imagens são extraídas em memória, recortadas, medidas e
-                  descartadas assim que a resposta sai.
+                  As imagens são extraídas em memória, recortadas, medidas e descartadas assim que
+                  a resposta sai. O arquivo não é gravado no servidor.
                 </p>
               </header>
             </Reveal>
@@ -206,7 +207,7 @@ export default function App() {
           />
         )}
 
-        <Method model={model} />
+        <Results model={model} diseases={diseases} />
       </main>
 
       <Footer />

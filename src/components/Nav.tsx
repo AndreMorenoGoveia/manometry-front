@@ -5,7 +5,7 @@ import type { Health } from "../types";
 const SECTIONS = [
   { id: "analise", label: "Análise" },
   { id: "atlas", label: "Atlas" },
-  { id: "metodo", label: "Método" },
+  { id: "resultados", label: "Resultados" },
 ];
 
 interface NavProps {

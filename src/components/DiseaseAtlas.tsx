@@ -73,8 +73,7 @@ export default function DiseaseAtlas({
               Atlas
             </p>
             <h2 className="text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.02] tracking-[-0.04em]">
-              As oito classes que o modelo
-              <span className="font-serif italic font-normal"> sabe nomear</span>
+              Atlas dos oito diagnósticos
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-mist">
               Critérios da Classificação de Chicago v4.0, a assinatura de cada uma na topografia de
@@ -130,8 +129,7 @@ export default function DiseaseAtlas({
               })}
             </ul>
             <p className="mt-5 text-xs leading-relaxed text-dim">
-              A barra é o número de exames da classe no corpus de 1.681 estudos — o desbalanceamento
-              que a acurácia balanceada e o macro-F1 corrigem.
+              A barra é o número de exames da classe no corpus de 1.681 estudos.
             </p>
           </nav>
 
@@ -155,7 +153,7 @@ export default function DiseaseAtlas({
                     {active.name}
                   </h3>
                   <p className="mt-2 text-sm text-dim">{active.english}</p>
-                  <p className="mt-5 font-serif text-xl italic text-mist">{active.tagline}</p>
+                  <p className="mt-5 text-lg leading-snug text-mist">{active.tagline}</p>
                   <p className="mt-6 text-[0.975rem] leading-relaxed text-mist">{active.summary}</p>
 
                   {performance && (

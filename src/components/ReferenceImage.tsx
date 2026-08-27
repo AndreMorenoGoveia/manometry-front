@@ -54,7 +54,7 @@ export default function ReferenceImage({ slug, accent, name }: ReferenceImagePro
       <figcaption className="text-xs leading-relaxed text-dim">
         {state === "missing"
           ? "Esquema da assinatura no traçado. O exemplo real aparece quando o corpus está montado no servidor."
-          : "Deglutição real da partição de teste, com a moldura branca já removida — exatamente o recorte que o modelo recebe."}
+          : "Deglutição real da partição de teste, com a moldura branca já removida: é exatamente o recorte que o modelo recebe."}
       </figcaption>
     </figure>
   );

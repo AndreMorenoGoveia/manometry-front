@@ -35,7 +35,7 @@ export default function ChicagoLadder({ gates }: ChicagoLadderProps) {
                   : "border-chalk/10 bg-chalk/[0.03] text-dim"
               }`}
             >
-              {gate.open ? "✓" : "—"}
+              {gate.open ? "✓" : "·"}
             </span>
             <div className="min-w-0 flex-1">
               <p className={`text-sm ${gate.open ? "text-chalk" : "text-mist"}`}>{gate.label}</p>

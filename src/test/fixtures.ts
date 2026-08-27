@@ -49,7 +49,7 @@ export const swallows: SwallowResult[] = [1, 2, 3].map((index) => ({
   pattern_label: index === 2 ? "Falha" : "Pressurização panesofágica",
   pattern_description:
     index === 2
-      ? "Sem contração mensurável — DCI abaixo de 100 mmHg·s·cm."
+      ? "Sem contração mensurável, com DCI abaixo de 100 mmHg·s·cm."
       : "Coluna pressurizada de forma uniforme entre o esfíncter superior e a JEG.",
   colour_confidence: 0.93,
   metrics: metrics({ dci: index === 2 ? 12 : 62 }),

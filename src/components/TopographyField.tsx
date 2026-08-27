@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
  * The ambient background: a slow, synthetic pressure topography.
  *
  * It is the same picture the model reads, drawn as atmosphere rather than as a
- * chart — a peristaltic front descending through the oesophageal body, a
+ * chart: a peristaltic front descending through the oesophageal body, a
  * standing high-pressure band where the junction sits, and a soft bloom that
  * follows the pointer. `accent` tints the warm end of the ramp, so once a study
  * has been classified the whole page settles into that diagnosis's colour.
@@ -171,11 +171,14 @@ export default function TopographyField({
   className = "",
 }: TopographyFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  // Read by the render loop without re-creating the WebGL program.
+  // Read by the render loop, which must not be torn down and rebuilt just
+  // because the page changed colour.
   const accentRef = useRef(accent);
   const intensityRef = useRef(intensity);
-  accentRef.current = accent;
-  intensityRef.current = intensity;
+  useEffect(() => {
+    accentRef.current = accent;
+    intensityRef.current = intensity;
+  }, [accent, intensity]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -198,7 +201,7 @@ export default function TopographyField({
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
     gl.useProgram(program);
 
-    // One triangle that covers the clip volume — cheaper than a quad and it
+    // One triangle that covers the clip volume, cheaper than a quad, and it
     // avoids the diagonal seam two triangles produce in derivative-heavy shaders.
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);

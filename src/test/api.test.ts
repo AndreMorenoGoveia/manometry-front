@@ -1,6 +1,14 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { ApiError, analyze, getDiseases, getHealth } from "../api";
+import {
+  ApiError,
+  analyze,
+  getDiseases,
+  getHealth,
+  getSampleDiagnoses,
+  getSampleReport,
+  referenceImageUrl,
+} from "../api";
 import { diseases, health } from "./fixtures";
 
 const jsonResponse = (body: unknown, status = 200) =>
@@ -74,5 +82,57 @@ describe("analyze", () => {
   it("throws ApiError, not a bare Error", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ detail: "nope" }, 503)));
     await expect(analyze(new File(["x"], "l.docx"))).rejects.toBeInstanceOf(ApiError);
+  });
+});
+
+describe("getSampleDiagnoses", () => {
+  it("returns the list the server offers", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ available: ["normal_motility"] })));
+    await expect(getSampleDiagnoses()).resolves.toEqual(["normal_motility"]);
+  });
+
+  it("degrades to no samples rather than breaking the page", async () => {
+    // A server without the corpus mounted answers 404 here; the dropzone is
+    // still perfectly usable, so this must not surface as an error.
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ detail: "sem corpus" }, 404)));
+    await expect(getSampleDiagnoses()).resolves.toEqual([]);
+  });
+});
+
+describe("getSampleReport", () => {
+  it("wraps the download as a named .docx File", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(new Blob(["docx"]), { status: 200 })),
+    );
+    const file = await getSampleReport("achalasia_type_ii");
+    expect(file.name).toBe("laudo_exemplo_achalasia_type_ii.docx");
+    expect(file.type).toContain("wordprocessingml");
+  });
+
+  it("escapes the slug into the query", async () => {
+    const seen: string[] = [];
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) => {
+        seen.push(String(input));
+        return new Response(new Blob([""]), { status: 200 });
+      }),
+    );
+    await getSampleReport("a b/c");
+    expect(seen[0]).toContain("diagnosis=a%20b%2Fc");
+  });
+
+  it("raises with the server's status when the corpus is missing", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ detail: "sem corpus" }, 404)));
+    await expect(getSampleReport("normal_motility")).rejects.toBeInstanceOf(ApiError);
+  });
+});
+
+describe("referenceImageUrl", () => {
+  it("points at the disease's own reference route", () => {
+    expect(referenceImageUrl("achalasia_type_i")).toBe(
+      "/api/diseases/achalasia_type_i/reference.png",
+    );
   });
 });

@@ -1,3 +1,6 @@
+/** Shown wherever a number the API did not send would go. */
+export const MISSING = "n/d";
+
 const decimals = (value: number, places: number) =>
   new Intl.NumberFormat("pt-BR", {
     minimumFractionDigits: places,
@@ -19,7 +22,7 @@ const PLACES: Record<string, number> = {
 };
 
 export function formatMetric(key: string, value: number): string {
-  if (!Number.isFinite(value)) return "—";
+  if (!Number.isFinite(value)) return MISSING;
   return decimals(value, PLACES[key] ?? 1);
 }
 
@@ -28,18 +31,18 @@ export function formatUnit(unit: string): string {
 }
 
 export function percent(value: number, places = 0): string {
-  if (!Number.isFinite(value)) return "—";
+  if (!Number.isFinite(value)) return MISSING;
   return `${decimals(value * 100, places)}%`;
 }
 
 export function number(value: number, places = 1): string {
-  if (!Number.isFinite(value)) return "—";
+  if (!Number.isFinite(value)) return MISSING;
   return decimals(value, places);
 }
 
 /** An integer with pt-BR thousands grouping: 1681 -> "1.681". */
 export function count(value: number): string {
-  if (!Number.isFinite(value)) return "—";
+  if (!Number.isFinite(value)) return MISSING;
   return decimals(value, 0);
 }
 

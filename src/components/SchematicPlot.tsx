@@ -4,7 +4,7 @@ import { alpha } from "../lib/format";
  * A stylised topography for each diagnosis: axial position down, time across,
  * the contractile front drawn as a band and the junction as a standing bar.
  *
- * It is a diagram, not data — it exists so the reference page can state the
+ * It is a diagram, not data. It exists so the reference page can state the
  * pattern even when the corpus (and therefore the real example image) is not
  * mounted, and so the reader has a legend to compare a real plot against.
  */

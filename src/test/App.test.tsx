@@ -50,11 +50,15 @@ describe("App", () => {
     stubApi();
     render(<App />);
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Dez deglutições");
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      "Classificação de Chicago v4.0",
+    );
     expect(await screen.findByText(/modelo pronto/)).toBeInTheDocument();
     expect(await screen.findByRole("navigation", { name: "Diagnósticos" })).toBeInTheDocument();
-    // The model card feeds the hero statistics and the method panel.
-    await waitFor(() => expect(screen.getAllByText("0,743").length).toBeGreaterThan(0));
+    // The results table is the only place model numbers are quoted.
+    const results = document.getElementById("resultados")!;
+    await waitFor(() => expect(within(results).getByRole("table")).toBeInTheDocument());
+    expect(within(results).getByText("88,0%")).toBeInTheDocument();   // recall
   });
 
   it("walks an upload from the dropzone to the diagnosis", async () => {

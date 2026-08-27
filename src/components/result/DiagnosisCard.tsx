@@ -1,10 +1,12 @@
 import { alpha, duration, percent } from "../../lib/format";
+import { useAfterMount } from "../../lib/useAfterMount";
 import type { AnalysisResponse } from "../../types";
 
 function Gauge({ value, accent }: { value: number; accent: string }) {
+  const mounted = useAfterMount();
   const radius = 52;
   const circumference = 2 * Math.PI * radius;
-  const filled = Math.max(0, Math.min(1, value)) * circumference;
+  const filled = (mounted ? Math.max(0, Math.min(1, value)) : 0) * circumference;
   return (
     <svg viewBox="0 0 120 120" className="h-28 w-28 -rotate-90" role="img" aria-label={`Confiança ${percent(value)}`}>
       <circle cx="60" cy="60" r={radius} fill="none" stroke="currentColor" strokeWidth="6" className="text-chalk/8" />
@@ -51,7 +53,7 @@ export default function DiagnosisCard({ result, onOpenAtlas }: DiagnosisCardProp
           <h3 className="mt-4 text-[clamp(2rem,4.4vw,3.4rem)] font-medium leading-[1.02] tracking-[-0.04em]">
             {diagnosis.name}
           </h3>
-          <p className="mt-3 font-serif text-xl italic text-mist sm:text-2xl">{diagnosis.tagline}</p>
+          <p className="mt-3 text-lg leading-snug text-mist sm:text-xl">{diagnosis.tagline}</p>
           <p className="mt-6 text-[0.975rem] leading-relaxed text-mist">{diagnosis.summary}</p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">

@@ -1,4 +1,5 @@
 import { alpha, percent } from "../../lib/format";
+import { useAfterMount } from "../../lib/useAfterMount";
 import type { ClassScore } from "../../types";
 
 interface RankingProps {
@@ -6,6 +7,7 @@ interface RankingProps {
 }
 
 export default function Ranking({ ranking }: RankingProps) {
+  const mounted = useAfterMount();
   const top = ranking[0]?.probability ?? 1;
   return (
     <section className="rounded-3xl border hairline bg-slab/40 p-7 sm:p-9">
@@ -33,7 +35,9 @@ export default function Ranking({ ranking }: RankingProps) {
               <div
                 className="h-full rounded-full"
                 style={{
-                  width: `${Math.max(entry.probability / Math.max(top, 1e-6), 0.004) * 100}%`,
+                  width: mounted
+                    ? `${Math.max(entry.probability / Math.max(top, 1e-6), 0.004) * 100}%`
+                    : "0%",
                   background:
                     index === 0
                       ? entry.accent

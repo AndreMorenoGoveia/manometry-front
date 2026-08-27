@@ -24,8 +24,8 @@ export function scrollToId(id: string, offset = -80): void {
  *
  * While Lenis is running it drives `window.scrollTo` itself, so the CSS
  * `scroll-behavior: smooth` (which is the fallback for when Lenis is absent)
- * is switched off for the duration — the two animating the same scroll position
- * fight and produce a stutter.
+ * is switched off for the duration, because the two animating the same scroll
+ * position fight and produce a stutter.
  */
 export function useSmoothScroll(enabled = true) {
   useEffect(() => {

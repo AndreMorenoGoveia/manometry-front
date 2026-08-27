@@ -49,7 +49,7 @@ await page.goto(BASE, { waitUntil: "domcontentloaded" });
 // --- landing -----------------------------------------------------------------
 await page.waitForSelector("h1");
 check(
-  (await page.locator("h1").innerText()).includes("Dez deglutições"),
+  (await page.locator("h1").innerText()).includes("Classificação de Chicago"),
   "o título principal não apareceu",
 );
 check(await page.locator("[data-testid=dropzone]").isVisible(), "a zona de upload não apareceu");

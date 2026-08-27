@@ -15,8 +15,8 @@ describe("formatMetric", () => {
   });
 
   it("shows a dash instead of NaN", () => {
-    expect(formatMetric("dci", Number.NaN)).toBe("—");
-    expect(formatMetric("irp4", Number.POSITIVE_INFINITY)).toBe("—");
+    expect(formatMetric("dci", Number.NaN)).toBe("n/d");
+    expect(formatMetric("irp4", Number.POSITIVE_INFINITY)).toBe("n/d");
   });
 });
 

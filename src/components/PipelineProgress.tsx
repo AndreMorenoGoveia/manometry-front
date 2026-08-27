@@ -3,21 +3,25 @@ import { useEffect, useState } from "react";
 /**
  * The seven stages an upload actually goes through, revealed one at a time.
  *
- * The cadence is indicative — only the server knows when a stage really ends —
- * so the last stage never marks itself complete: it waits on the response. That
- * keeps the panel a description of the work rather than a fake progress bar.
+ * The cadence is indicative, since only the server knows when a stage really
+ * ends, so the last stage never marks itself complete: it waits on the response.
+ * That keeps the panel a description of the work rather than a fake progress bar.
  */
 const STAGES = [
   "Abrindo o pacote do laudo",
   "Separando as topografias do logotipo",
   "Recortando a moldura branca de cada painel",
-  "Invertendo o mapa de cores em pressão",
+  "Convertendo a cor do gráfico em pressão",
   "Medindo IRP, DCI e latência distal",
-  "Codificando as deglutições no ConvNeXt",
-  "Agregando pelo ramo Chicago e pelo Set Transformer",
+  "Analisando as dez deglutições",
+  "Consolidando o diagnóstico do exame",
 ];
 
 const STEP_MS = 620;
+// A hosted backend on a plan that sleeps takes a while to answer the first
+// request of the day. Past this point, say so instead of leaving the reader
+// watching a spinner.
+const COLD_START_MS = 20_000;
 
 interface PipelineProgressProps {
   filename: string;
@@ -25,13 +29,19 @@ interface PipelineProgressProps {
 
 export default function PipelineProgress({ filename }: PipelineProgressProps) {
   const [reached, setReached] = useState(0);
+  const [slow, setSlow] = useState(false);
 
   useEffect(() => {
     setReached(0);
+    setSlow(false);
     const timer = window.setInterval(() => {
       setReached((current) => Math.min(current + 1, STAGES.length - 1));
     }, STEP_MS);
-    return () => window.clearInterval(timer);
+    const cold = window.setTimeout(() => setSlow(true), COLD_START_MS);
+    return () => {
+      window.clearInterval(timer);
+      window.clearTimeout(cold);
+    };
   }, [filename]);
 
   return (
@@ -80,6 +90,12 @@ export default function PipelineProgress({ filename }: PipelineProgressProps) {
           );
         })}
       </ol>
+      {slow && (
+        <p className="mt-6 border-t hairline pt-5 text-xs leading-relaxed text-dim">
+          Está demorando mais que o normal. Em servidor sem GPU a análise leva
+          dezenas de segundos, e a primeira do dia ainda espera o serviço acordar.
+        </p>
+      )}
     </div>
   );
 }
