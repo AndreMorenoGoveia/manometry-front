@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #05060a;
+  --color-ink: #090b12;
+  --color-slab: #0f1420;
+  --color-ridge: #161c2b;
+  --color-chalk: #eef2f8;
+  --color-mist: #98a3ba;
+  --color-dim: #5c6780;
+  --color-signal: #60e6c8;
+  --color-ember: #ff8a5c;
+  --color-alarm: #ff5c7a;
+
+  --font-display: "Inter Tight", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --hairline: color-mix(in oklab, var(--color-chalk) 9%, transparent);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+    /* Fallback for when Lenis is absent; `useSmoothScroll` turns it off while
+       Lenis is driving the scroll position itself. */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-void);
+    color: var(--color-chalk);
+    font-family: var(--font-display);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-signal) 32%, transparent);
+    color: var(--color-chalk);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--color-chalk) 12%, transparent);
+    border-radius: 999px;
+    border: 3px solid var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--color-chalk) 22%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  h1, h2, h3, h4 {
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* A one-pixel rule that survives fractional device pixel ratios. */
+  .hairline {
+    border-color: var(--hairline);
+  }
+
+  .glass {
+    background: color-mix(in oklab, var(--color-slab) 72%, transparent);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid var(--hairline);
+  }
+
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-dim);
+  }
+
+  .numeral {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Film grain: one repeating SVG turbulence, cheap and resolution independent. */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.28;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+
+  .rule-gradient {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--color-chalk) 16%, transparent) 22%,
+      color-mix(in oklab, var(--color-chalk) 16%, transparent) 78%,
+      transparent
+    );
+  }
+}
+
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+    transition:
+      opacity 0.9s var(--ease-out-expo),
+      transform 0.9s var(--ease-out-expo);
+  }
+  .reveal[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
