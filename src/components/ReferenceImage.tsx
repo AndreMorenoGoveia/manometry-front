@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import SchematicPlot from "./SchematicPlot";
 import { alpha } from "../lib/format";
@@ -17,10 +17,21 @@ interface ReferenceImageProps {
  */
 export default function ReferenceImage({ slug, accent, name }: ReferenceImageProps) {
   const [state, setState] = useState<"loading" | "ready" | "missing">("loading");
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     setState("loading");
   }, [slug]);
+
+  useEffect(() => {
+    // An image already in the browser cache can finish decoding before React
+    // attaches `onLoad`, and then the event never arrives and the figure stays
+    // blank. Reading `complete` on mount covers that case; `naturalWidth` is
+    // what separates a decoded image from one that failed.
+    const element = imageRef.current;
+    if (!element || !element.complete) return;
+    setState(element.naturalWidth > 0 ? "ready" : "missing");
+  }, [slug, state]);
 
   return (
     <figure className="flex flex-col gap-4">
@@ -35,6 +46,7 @@ export default function ReferenceImage({ slug, accent, name }: ReferenceImagePro
         {state !== "missing" ? (
           <img
             key={slug}
+            ref={imageRef}
             src={referenceImageUrl(slug)}
             alt={`Topografia de pressão de um exame com ${name}`}
             loading="lazy"

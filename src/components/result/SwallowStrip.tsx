@@ -29,8 +29,8 @@ export default function SwallowStrip({ swallows }: SwallowStripProps) {
         <div>
           <h4 className="text-lg font-medium tracking-tight">As deglutições, uma a uma</h4>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-mist">
-            Cada painel é a topografia já recortada, igual à que o codificador recebeu.
-            O padrão indicado é o da contratilidade da v4.0, derivado das métricas da própria imagem.
+            Cada painel é a topografia já recortada, igual à que o modelo recebeu. O padrão
+            indicado é o de contratilidade da v4.0, derivado das métricas da própria imagem.
           </p>
         </div>
         <span className="kicker">clique para inspecionar</span>

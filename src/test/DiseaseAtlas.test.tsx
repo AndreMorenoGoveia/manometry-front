@@ -99,3 +99,46 @@ describe("DiseaseAtlas", () => {
     }
   });
 });
+
+describe("ReferenceImage", () => {
+  it("shows an image that was already cached before React attached onLoad", async () => {
+    // jsdom never loads images, so the cached case is simulated by making
+    // `complete` and `naturalWidth` report a decoded image.
+    Object.defineProperty(HTMLImageElement.prototype, "complete", {
+      configurable: true,
+      get: () => true,
+    });
+    Object.defineProperty(HTMLImageElement.prototype, "naturalWidth", {
+      configurable: true,
+      get: () => 336,
+    });
+    try {
+      renderAtlas("normal_motility");
+      const image = await screen.findByRole("img", { name: /Topografia de pressão/ });
+      expect(image.className).toContain("opacity-100");
+    } finally {
+      delete (HTMLImageElement.prototype as never as Record<string, unknown>)["complete"];
+      delete (HTMLImageElement.prototype as never as Record<string, unknown>)["naturalWidth"];
+    }
+  });
+
+  it("falls back to the schematic when the image cannot be decoded", async () => {
+    Object.defineProperty(HTMLImageElement.prototype, "complete", {
+      configurable: true,
+      get: () => true,
+    });
+    Object.defineProperty(HTMLImageElement.prototype, "naturalWidth", {
+      configurable: true,
+      get: () => 0,
+    });
+    try {
+      renderAtlas("normal_motility");
+      expect(
+        await screen.findByText(/Esquema da assinatura no traçado/),
+      ).toBeInTheDocument();
+    } finally {
+      delete (HTMLImageElement.prototype as never as Record<string, unknown>)["complete"];
+      delete (HTMLImageElement.prototype as never as Record<string, unknown>)["naturalWidth"];
+    }
+  });
+});

@@ -27,7 +27,7 @@ export default function Nav({ health }: NavProps) {
   const status = !health
     ? { label: "conectando", short: "conectando", tone: "text-dim" }
     : health.model_available
-      ? { label: `modelo pronto · ${health.device}`, short: "pronto", tone: "text-signal" }
+      ? { label: "modelo pronto", short: "pronto", tone: "text-signal" }
       : { label: "modelo indisponível", short: "indisponível", tone: "text-alarm" };
 
   return (
