@@ -37,7 +37,7 @@ export default function StudyMetrics({ study }: StudyMetricsProps) {
       </header>
       <div className="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-4">
         <Cell label="IRP mediana" value={number(study.median_irp4, 1)} unit="mmHg" hint="corte 15" />
-        <Cell label="DCI mediana" value={number(study.median_dci, 0)} unit="mmHg·s·cm" hint="normal 450–8.000" />
+        <Cell label="DCI mediana" value={number(study.median_dci, 0)} unit="mmHg·s·cm" hint="normal 450 a 8.000" />
         <Cell label="DCI máxima" value={number(study.max_dci, 0)} unit="mmHg·s·cm" />
         <Cell label="JEG basal mediana" value={number(study.median_egj_basal, 1)} unit="mmHg" />
         <Cell label="Latência distal mediana" value={number(study.median_distal_latency, 1)} unit="s" hint="prematura < 4,5" />

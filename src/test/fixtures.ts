@@ -139,7 +139,7 @@ export const diseases: Disease[] = CLASSES.map((entry, index) => ({
   symptoms: ["Disfagia", "Dor torácica"],
   management: `Conduta para ${entry.short_name}.`,
   differential: ["Diferencial A", "Diferencial B"],
-  metric_signature: { irp4: "≤ 15 mmHg", dci: "450 – 8.000" },
+  metric_signature: { irp4: "≤ 15 mmHg", dci: "450 a 8.000" },
   prevalence: 100 + index * 40,
   caveat: index === 5 ? "Ressalva importante." : "",
   references: ["Chicago Classification v4.0"],
