@@ -111,7 +111,9 @@ export default function DiseaseAtlas({
                           <span className="kicker text-[0.5625rem] text-signal">deste exame</span>
                         )}
                       </span>
-                      <span className="mt-2.5 flex items-center gap-2 pl-5">
+                      {/* Capped, or the bar stretches across a tablet-width
+                          column and stops reading as a proportion. */}
+                      <span className="mt-2.5 flex max-w-[240px] items-center gap-2 pl-5">
                         <span className="h-[3px] flex-1 overflow-hidden rounded-full bg-chalk/6">
                           <span
                             className="block h-full rounded-full transition-all duration-700"
