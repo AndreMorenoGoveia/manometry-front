@@ -51,19 +51,22 @@ export default function Results({ model, diseases }: ResultsProps) {
           <Reveal>
             <div className="mt-14 overflow-x-auto">
               <table className="w-full min-w-[640px] border-collapse text-left">
+                <caption className="sr-only">
+                  Sensibilidade, precisão e F1 de cada diagnóstico na partição de teste
+                </caption>
                 <thead>
                   <tr className="border-b hairline">
-                    <th className="kicker pb-4 pr-4 font-normal">diagnóstico</th>
-                    <th className="kicker pb-4 pr-4 text-right font-normal">exames</th>
-                    <th className="kicker pb-4 pr-4 text-right font-normal">sensibilidade</th>
-                    <th className="kicker pb-4 pr-4 text-right font-normal">precisão</th>
-                    <th className="kicker w-[26%] pb-4 font-normal">F1</th>
+                    <th scope="col" className="kicker pb-4 pr-4 font-normal">diagnóstico</th>
+                    <th scope="col" className="kicker pb-4 pr-4 text-right font-normal">exames</th>
+                    <th scope="col" className="kicker pb-4 pr-4 text-right font-normal">sensibilidade</th>
+                    <th scope="col" className="kicker pb-4 pr-4 text-right font-normal">precisão</th>
+                    <th scope="col" className="kicker w-[26%] pb-4 font-normal">F1</th>
                   </tr>
                 </thead>
                 <tbody>
                   {rows.map((row) => (
                     <tr key={row.slug} className="border-b hairline">
-                      <td className="py-4 pr-4">
+                      <th scope="row" className="py-4 pr-4 font-normal">
                         <span className="flex items-center gap-3">
                           <span
                             className="h-2 w-2 shrink-0 rounded-full"
@@ -71,7 +74,7 @@ export default function Results({ model, diseases }: ResultsProps) {
                           />
                           <span className="text-[0.95rem] text-chalk">{row.name}</span>
                         </span>
-                      </td>
+                      </th>
                       <td className="numeral py-4 pr-4 text-right text-sm text-mist">
                         {row.support}
                       </td>
