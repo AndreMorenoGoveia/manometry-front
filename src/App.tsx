@@ -24,7 +24,7 @@ import type { AnalysisResponse, Disease, Health, ModelCard } from "./types";
 const DEFAULT_ACCENT = "#60e6c8";
 
 // Cloud Run scales to zero: the first request boots a container and loads the checkpoint before it
-// answers (about 20 s). Health is polled until the model is in memory, and the upload waits for it.
+// answers (about 30 s). Health is polled until the model is in memory, and the upload waits for it.
 const HEALTH_RETRY_MS = 2500;
 const WARMUP_LIMIT_MS = 180_000;
 

@@ -209,7 +209,7 @@ function WarmingUp({ waited }: { waited: number }) {
         <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-mist">
           {slow
             ? "Está demorando mais que o normal. Pode manter a página aberta: o envio é liberado sozinho assim que o servidor responder."
-            : "O servidor descansa quando ninguém está usando e leva uns 20 segundos para acordar. O envio é liberado sozinho; enquanto isso, dê uma olhada no atlas abaixo."}
+            : "O servidor descansa quando ninguém está usando e leva uns 30 segundos para acordar. O envio é liberado sozinho; enquanto isso, dê uma olhada no atlas abaixo."}
         </p>
       </div>
       <div className="flex w-full max-w-xs flex-col items-center gap-2.5">

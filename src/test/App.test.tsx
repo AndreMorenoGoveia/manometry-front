@@ -129,7 +129,7 @@ describe("App", () => {
     render(<App />);
 
     expect(await screen.findByText("Preparando o modelo…")).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveTextContent(/uns 20 segundos/);
+    expect(screen.getByRole("status")).toHaveTextContent(/uns 30 segundos/);
     expect(screen.queryByLabelText("Laudo de manometria")).not.toBeInTheDocument();
     expect(screen.getByTestId("dropzone")).toHaveAttribute("aria-busy", "true");
   });
