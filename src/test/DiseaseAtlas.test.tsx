@@ -39,8 +39,8 @@ describe("DiseaseAtlas", () => {
   it("asks the parent to change the selection", async () => {
     const { onSelect } = renderAtlas();
     const index = screen.getByRole("navigation", { name: "Diagnósticos" });
-    await userEvent.click(within(index).getByRole("button", { name: /Espasmo esofágico distal/ }));
-    expect(onSelect).toHaveBeenCalledWith("distal_esophageal_spasm");
+    await userEvent.click(within(index).getByRole("button", { name: /Obstrução da saída da junção esofagogástrica/ }));
+    expect(onSelect).toHaveBeenCalledWith("egj_outflow_obstruction");
   });
 
   it("falls back to the first entry when nothing is selected yet", () => {
@@ -62,7 +62,7 @@ describe("DiseaseAtlas", () => {
   });
 
   it("shows a caveat only where one exists", () => {
-    renderAtlas("hypotensive_egj");
+    renderAtlas("egj_outflow_obstruction");
     expect(screen.getByText("Ressalva importante.")).toBeInTheDocument();
   });
 

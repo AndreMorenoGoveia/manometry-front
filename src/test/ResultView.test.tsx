@@ -31,7 +31,7 @@ describe("ResultView", () => {
 
   it("lists every class in descending probability", () => {
     renderResult();
-    const section = screen.getByRole("heading", { name: /Distribuição entre as oito classes/ })
+    const section = screen.getByRole("heading", { name: /Distribuição entre as sete classes/ })
       .closest("section")!;
     const rows = within(section).getAllByRole("listitem");
     expect(rows).toHaveLength(analysis.ranking.length);

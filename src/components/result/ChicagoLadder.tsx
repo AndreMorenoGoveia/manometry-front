@@ -17,8 +17,8 @@ export default function ChicagoLadder({ gates }: ChicagoLadderProps) {
       <header className="mb-7">
         <h4 className="text-lg font-medium tracking-tight">Portas da Classificação de Chicago</h4>
         <p className="mt-2 text-sm leading-relaxed text-mist">
-          Critérios da v4.0 aplicados às métricas recuperadas da imagem. São proxies
-          calibrados na cor do gráfico, não medidas do sistema de aquisição.
+          Critérios da v4.0 aplicados aos estados e medidas que o modelo estima em cada
+          deglutição. São estimativas a partir da imagem, não medidas do sistema de aquisição.
         </p>
       </header>
       <ul className="flex flex-col">

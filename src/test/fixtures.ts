@@ -4,9 +4,8 @@ const CLASSES = [
   { slug: "absent_contractility", name: "Contratilidade ausente", short_name: "Contratilidade ausente", accent: "#94A3B8" },
   { slug: "achalasia_type_i", name: "Acalásia tipo I (clássica)", short_name: "Acalásia I", accent: "#A78BFA" },
   { slug: "achalasia_type_ii", name: "Acalásia tipo II (com pressurização panesofágica)", short_name: "Acalásia II", accent: "#E879F9" },
-  { slug: "distal_esophageal_spasm", name: "Espasmo esofágico distal", short_name: "Espasmo distal", accent: "#FB923C" },
+  { slug: "egj_outflow_obstruction", name: "Obstrução da saída da junção esofagogástrica", short_name: "Obstrução da JEG", accent: "#38BDF8" },
   { slug: "hypercontractile_esophagus", name: "Esôfago hipercontrátil (jackhammer)", short_name: "Hipercontrátil", accent: "#F87171" },
-  { slug: "hypotensive_egj", name: "Junção esofagogástrica hipotensiva", short_name: "JEG hipotensiva", accent: "#38BDF8" },
   { slug: "ineffective_esophageal_motility", name: "Motilidade esofágica ineficaz", short_name: "MEI", accent: "#FBBF24" },
   { slug: "normal_motility", name: "Motilidade esofágica normal", short_name: "Normal", accent: "#34D399" },
 ];
@@ -14,10 +13,9 @@ const CLASSES = [
 const PROBABILITIES: Record<string, number> = {
   achalasia_type_ii: 0.82,
   achalasia_type_i: 0.09,
-  distal_esophageal_spasm: 0.035,
+  egj_outflow_obstruction: 0.035,
   absent_contractility: 0.02,
   hypercontractile_esophagus: 0.012,
-  hypotensive_egj: 0.009,
   ineffective_esophageal_motility: 0.008,
   normal_motility: 0.006,
 };
@@ -141,7 +139,7 @@ export const diseases: Disease[] = CLASSES.map((entry, index) => ({
   differential: ["Diferencial A", "Diferencial B"],
   metric_signature: { irp4: "≤ 15 mmHg", dci: "450 a 8.000" },
   prevalence: 100 + index * 40,
-  caveat: index === 5 ? "Ressalva importante." : "",
+  caveat: index === 3 ? "Ressalva importante." : "",
   references: ["Chicago Classification v4.0"],
 }));
 

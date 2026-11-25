@@ -26,9 +26,11 @@ export default function Nav({ health }: NavProps) {
   // bar has to stay one line at 320 px.
   const status = !health
     ? { label: "conectando", short: "conectando", tone: "text-dim" }
-    : health.model_available
-      ? { label: "modelo pronto", short: "pronto", tone: "text-signal" }
-      : { label: "modelo indisponível", short: "indisponível", tone: "text-alarm" };
+    : !health.model_available
+      ? { label: "modelo indisponível", short: "indisponível", tone: "text-alarm" }
+      : health.model_loaded
+        ? { label: "modelo pronto", short: "pronto", tone: "text-signal" }
+        : { label: "carregando modelo", short: "carregando", tone: "text-ember" };
 
   return (
     <header

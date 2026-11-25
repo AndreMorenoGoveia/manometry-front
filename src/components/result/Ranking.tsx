@@ -12,7 +12,7 @@ export default function Ranking({ ranking }: RankingProps) {
   return (
     <section className="rounded-3xl border hairline bg-slab/40 p-7 sm:p-9">
       <header className="mb-7 flex items-baseline justify-between gap-4">
-        <h4 className="text-lg font-medium tracking-tight">Distribuição entre as oito classes</h4>
+        <h4 className="text-lg font-medium tracking-tight">Distribuição entre as sete classes</h4>
         <span className="kicker">softmax do exame</span>
       </header>
       <ol className="flex flex-col gap-3.5">

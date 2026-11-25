@@ -146,6 +146,31 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .warmup-trace {
+    animation: warmup-trace 2.4s var(--ease-out-expo) infinite;
+  }
+  .warmup-bar {
+    animation: warmup-bar 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes warmup-trace {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+
+@keyframes warmup-bar {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

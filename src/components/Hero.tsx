@@ -45,7 +45,7 @@ export default function Hero({ accent, diseases }: HeroProps) {
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-mist sm:text-xl">
               Envie o laudo da manometria. O sistema recorta as topografias de pressão das dez
-              deglutições, recupera os parâmetros de Chicago da própria imagem e devolve o
+              deglutições, estima os parâmetros de Chicago de cada uma a partir da imagem e devolve o
               diagnóstico do exame com os números que sustentam cada critério.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -69,7 +69,7 @@ export default function Hero({ accent, diseases }: HeroProps) {
                 href="#atlas"
                 className="inline-flex items-center gap-2 rounded-full border hairline px-6 py-3.5 text-[0.95rem] text-mist transition-colors hover:border-chalk/30 hover:text-chalk"
               >
-                Atlas das oito classes
+                Atlas das sete classes
               </a>
             </div>
           </div>

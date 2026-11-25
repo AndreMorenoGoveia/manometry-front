@@ -9,17 +9,16 @@ import { alpha } from "../lib/format";
  * mounted, and so the reader has a legend to compare a real plot against.
  */
 
-type Wave = "diagonal" | "broken" | "vertical" | "thick" | "block" | "none";
-type Junction = "relaxing" | "tight" | "weak" | "split";
+type Wave = "diagonal" | "broken" | "thick" | "block" | "none";
+type Junction = "relaxing" | "tight" | "weak";
 
 const SIGNATURES: Record<string, { wave: Wave; junction: Junction }> = {
   normal_motility: { wave: "diagonal", junction: "relaxing" },
   ineffective_esophageal_motility: { wave: "broken", junction: "relaxing" },
-  hypotensive_egj: { wave: "diagonal", junction: "split" },
   absent_contractility: { wave: "none", junction: "weak" },
   achalasia_type_i: { wave: "none", junction: "tight" },
   achalasia_type_ii: { wave: "block", junction: "tight" },
-  distal_esophageal_spasm: { wave: "vertical", junction: "relaxing" },
+  egj_outflow_obstruction: { wave: "diagonal", junction: "tight" },
   hypercontractile_esophagus: { wave: "thick", junction: "relaxing" },
 };
 
@@ -37,8 +36,6 @@ function wavePath(kind: Wave): { d: string; width: number; dash?: string }[] {
         { d: `M ${LEFT + 8} ${TOP + 14} C 62 74, 74 96, 92 112`, width: 9 },
         { d: `M 124 148 C 138 172, 146 190, ${RIGHT - 34} ${BOTTOM - 12}`, width: 7 },
       ];
-    case "vertical":
-      return [{ d: `M ${LEFT + 40} ${TOP + 18} C 84 90, 88 150, 96 ${BOTTOM - 10}`, width: 12 }];
     case "thick":
       return [
         { d: `M ${LEFT + 10} ${TOP + 16} C 74 96, 100 142, ${RIGHT - 30} ${BOTTOM - 12}`, width: 26 },
@@ -67,7 +64,6 @@ export default function SchematicPlot({ slug, accent, className = "" }: Schemati
     relaxing: { height: 8, opacity: 0.45, gap: true },
     tight: { height: 16, opacity: 1, gap: false },
     weak: { height: 5, opacity: 0.3, gap: true },
-    split: { height: 6, opacity: 0.5, gap: true },
   }[signature.junction];
 
   return (
@@ -158,17 +154,6 @@ export default function SchematicPlot({ slug, accent, className = "" }: Schemati
           rx="3"
           fill={accent}
           opacity={junction.opacity}
-        />
-      )}
-      {signature.junction === "split" && (
-        <rect
-          x={LEFT}
-          y={BOTTOM + junction.height + 6}
-          width={(RIGHT - LEFT) * 0.36}
-          height="4"
-          rx="2"
-          fill={accent}
-          opacity="0.35"
         />
       )}
 

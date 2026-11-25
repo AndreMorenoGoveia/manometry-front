@@ -65,7 +65,7 @@ describe("App", () => {
     stubApi();
     render(<App />);
 
-    await userEvent.upload(screen.getByLabelText("Laudo de manometria"), laudo());
+    await userEvent.upload(await screen.findByLabelText("Laudo de manometria"), laudo());
 
     const result = await screen.findByTestId("result-view");
     expect(
@@ -92,7 +92,7 @@ describe("App", () => {
     );
 
     render(<App />);
-    await userEvent.upload(screen.getByLabelText("Laudo de manometria"), laudo());
+    await userEvent.upload(await screen.findByLabelText("Laudo de manometria"), laudo());
 
     expect(await screen.findByTestId("pipeline-progress")).toHaveTextContent("laudo.docx");
     release(json(analysis));
@@ -103,7 +103,7 @@ describe("App", () => {
     stubApi({ analyze: () => json({ detail: "Nenhuma deglutição válida foi encontrada." }, 422) });
     render(<App />);
 
-    await userEvent.upload(screen.getByLabelText("Laudo de manometria"), laudo());
+    await userEvent.upload(await screen.findByLabelText("Laudo de manometria"), laudo());
 
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent("Nenhuma deglutição válida foi encontrada.");
@@ -122,6 +122,16 @@ describe("App", () => {
     await waitFor(() =>
       expect(screen.getByTestId("dropzone").className).toContain("pointer-events-none"),
     );
+  });
+
+  it("holds the upload with a friendly notice while the model is still loading", async () => {
+    stubApi({ health: json({ ...health, model_loaded: false }) });
+    render(<App />);
+
+    expect(await screen.findByText("Preparando o modelo…")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent(/uns 20 segundos/);
+    expect(screen.queryByLabelText("Laudo de manometria")).not.toBeInTheDocument();
+    expect(screen.getByTestId("dropzone")).toHaveAttribute("aria-busy", "true");
   });
 
   it("survives an API that is not there at all", async () => {
@@ -148,7 +158,7 @@ describe("App", () => {
   it("selects the diagnosed class in the atlas after an analysis", async () => {
     stubApi();
     render(<App />);
-    await userEvent.upload(screen.getByLabelText("Laudo de manometria"), laudo());
+    await userEvent.upload(await screen.findByLabelText("Laudo de manometria"), laudo());
     await screen.findByTestId("result-view");
 
     const index = screen.getByRole("navigation", { name: "Diagnósticos" });
@@ -160,7 +170,7 @@ describe("App", () => {
   it("returns to the dropzone when asked for another laudo", async () => {
     stubApi();
     render(<App />);
-    await userEvent.upload(screen.getByLabelText("Laudo de manometria"), laudo());
+    await userEvent.upload(await screen.findByLabelText("Laudo de manometria"), laudo());
     await screen.findByTestId("result-view");
 
     await userEvent.click(screen.getByRole("button", { name: /Analisar outro laudo/ }));

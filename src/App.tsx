@@ -23,6 +23,17 @@ import type { AnalysisResponse, Disease, Health, ModelCard } from "./types";
 
 const DEFAULT_ACCENT = "#60e6c8";
 
+// Cloud Run scales to zero: the first request boots a container and loads the checkpoint before it
+// answers (about 20 s). Health is polled until the model is in memory, and the upload waits for it.
+const HEALTH_RETRY_MS = 2500;
+const WARMUP_LIMIT_MS = 180_000;
+
+const pause = (ms: number, signal: AbortSignal) =>
+  new Promise<void>((resolve) => {
+    const timer = setTimeout(resolve, ms);
+    signal.addEventListener("abort", () => clearTimeout(timer), { once: true });
+  });
+
 type Stage =
   | { kind: "idle" }
   | { kind: "working"; filename: string }
@@ -31,6 +42,7 @@ type Stage =
 
 export default function App() {
   const [health, setHealth] = useState<Health | null>(null);
+  const [warming, setWarming] = useState(true);
   const [model, setModel] = useState<ModelCard | null>(null);
   const [diseases, setDiseases] = useState<Disease[]>([]);
   const [samples, setSamples] = useState<string[]>([]);
@@ -45,7 +57,20 @@ export default function App() {
     const controller = new AbortController();
     const { signal } = controller;
 
-    getHealth(signal).then(setHealth).catch(() => setHealth(null));
+    (async () => {
+      const deadline = Date.now() + WARMUP_LIMIT_MS;
+      while (!signal.aborted && Date.now() < deadline) {
+        try {
+          const current = await getHealth(signal);
+          setHealth(current);
+          if (current.model_loaded || !current.model_available) break;
+        } catch {
+          /* still booting, or not there at all: try again until the deadline */
+        }
+        await pause(HEALTH_RETRY_MS, signal);
+      }
+      if (!signal.aborted) setWarming(false);
+    })();
     getDiseases(signal)
       .then((list) => {
         setDiseases(list);
@@ -190,7 +215,8 @@ export default function App() {
                   sampleLabel={sampleLabel}
                   onSample={useSample}
                   loadingSample={loadingSample}
-                  disabled={health != null && !health.model_available}
+                  warming={warming && !health?.model_loaded}
+                  disabled={!health?.model_loaded}
                 />
               </div>
             )}

@@ -111,7 +111,7 @@ export default function Results({ model, diseases }: ResultsProps) {
         {test?.accuracy != null && (
           <Reveal delay={80}>
             <p className="mt-8 text-sm leading-relaxed text-dim">
-              No conjunto das oito classes o modelo acerta {percent(test.accuracy, 1)} dos exames.
+              No conjunto das sete classes o modelo acerta {percent(test.accuracy, 1)} dos exames.
               As classes raras puxam a média para baixo, e é por isso que a tabela vem antes do
               número único.
             </p>
